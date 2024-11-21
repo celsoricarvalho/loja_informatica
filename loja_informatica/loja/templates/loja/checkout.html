@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Finalizar Compra</h1>
+
+<h2>Resumo do Pedido</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Preço Unitário</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in pedido.pedidoproduto_set.all %}
+        <tr>
+            <td>{{ item.produto.nome }}</td>
+            <td>{{ item.quantidade }}</td>
+            <td>{{ item.preco_unitario }}</td>
+            <td>{{ item.preco_unitario|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p><strong>Total: R$ {{ pedido.total|floatformat:2 }}</strong></p>
+
+<!-- Formulário para finalizar a compra -->
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="endereco">Endereço de Envio:</label>
+        <input type="text" id="endereco" name="endereco" required>
+    </div>
+    <div>
+        <label for="metodo_pagamento">Método de Pagamento:</label>
+        <select id="metodo_pagamento" name="metodo_pagamento" required>
+            <option value="cartao">Cartão de Crédito</option>
+            <option value="boleto">Boleto Bancário</option>
+        </select>
+    </div>
+    <button type="submit">Finalizar Compra</button>
+</form>
+
+{% endblock %}
